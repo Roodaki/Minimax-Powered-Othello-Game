@@ -25,6 +25,9 @@ class OthelloGUI:
         self.message_font = pygame.font.SysFont(None, 24)
         self.message = ""
         self.invalid_move_message = ""
+        self.flip_sound = pygame.mixer.Sound("./utils/sounds/disk_flip.mp3")
+        self.end_game_sound = pygame.mixer.Sound("./utils/sounds/end_game.mp3")
+        self.invalid_play_sound = pygame.mixer.Sound("./utils/sounds/invalid_play.mp3")
 
     def initialize_pygame(self):
         """
@@ -124,8 +127,10 @@ class OthelloGUI:
                     self.invalid_move_message = (
                         ""  # Clear any previous invalid move message
                     )
+                    self.flip_sound.play()  # Play flip sound effect
                 else:
                     self.invalid_move_message = "Invalid move! Try again."
+                    self.invalid_play_sound.play()  # Play invalid play sound effect
 
     def run_game(self, return_to_menu_callback=None):
         """
@@ -154,6 +159,7 @@ class OthelloGUI:
             self.message = "It's a tie!"
 
         self.draw_board()
+        self.end_game_sound.play()  # Play end game sound effect
         pygame.time.delay(3000)  # Display the result for 2 seconds before returning
 
         # Call the return_to_menu_callback if provided
