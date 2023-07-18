@@ -127,10 +127,15 @@ class Menu:
                                 othello_gui.run_game()
 
                             elif button.text == "Single-player\n(Play with AI)":
-                                run_game()
+                                self.run_single_player_game()
 
                             elif button.text == "Return to Main Menu":
                                 self.draw_menu()  # Go back to the main menu
+
+    def run_single_player_game(self):
+        # Pass "ai" as the player_mode to indicate the single-player mode with AI
+        othello_gui = OthelloGUI(player_mode="ai")
+        othello_gui.run_game()
 
     def handle_input_credit(self):
         while True:

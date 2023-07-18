@@ -1,6 +1,8 @@
 import pygame
 import sys
 from othello_game import OthelloGame
+from ai_agent import get_best_move
+
 
 # Constants and colors
 WIDTH, HEIGHT = 480, 560  # Increase the height to accommodate the messaging area
@@ -12,9 +14,11 @@ GREEN_COLOR = (0, 128, 0)
 
 
 class OthelloGUI:
-    def __init__(self):
+    def __init__(self, player_mode="friend"):
         self.win = self.initialize_pygame()
-        self.game = OthelloGame()
+        self.game = OthelloGame(
+            player_mode=player_mode
+        )  # Pass the player_mode argument
         self.message_font = pygame.font.SysFont(None, 24)
         self.message = ""
 
@@ -98,6 +102,16 @@ class OthelloGUI:
     def run_game(self):
         while not self.game.is_game_over():
             self.handle_input()
+
+            # If it's the AI player's turn
+            if self.game.player_mode == "ai" and self.game.current_player == -1:
+                self.message = "AI is thinking..."
+                self.draw_board()  # Display the thinking message
+                ai_move = get_best_move(self.game)
+                pygame.time.delay(500)  # Wait for a short time to show the message
+                self.game.make_move(*ai_move)
+
+            self.message = ""  # Clear any previous messages
             self.draw_board()
 
         winner = self.game.get_winner()
