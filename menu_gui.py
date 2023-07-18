@@ -9,6 +9,7 @@ WHITE_COLOR = (255, 255, 255)
 BLACK_COLOR = (0, 0, 0)
 GREEN_COLOR = (0, 128, 0)
 SUBMENU_SPACING = 75  # Increase the vertical spacing between submenu buttons
+BACKGROUND_IMAGE_PATH = "./utils/pictures/othello.jpg"
 
 
 class Menu:
@@ -32,6 +33,10 @@ class Menu:
             "Return to Main Menu",  # Add "Return to Main Menu" option
         ]
         self.return_button = None
+        self.background_image = pygame.image.load(BACKGROUND_IMAGE_PATH)
+        self.background_image = pygame.transform.scale(
+            self.background_image, (WIDTH, HEIGHT)
+        )
 
     def initialize_pygame(self):
         """
@@ -49,13 +54,13 @@ class Menu:
         """
         Draw the main menu on the Pygame window.
         """
-        self.win.fill(GREEN_COLOR)
+        self.win.blit(self.background_image, (0, 0))  # Draw the background image
 
         buttons = []
         for i, item in enumerate(self.menu_items):
             button = Button(
-                WIDTH // 2, HEIGHT // 2 + i * 50, 200, 40, item, self.menu_font
-            )
+                WIDTH // 2, 200 + i * 50, 200, 40, item, self.menu_font
+            )  # Adjust vertical position to accommodate the picture
             buttons.append(button)
             button.draw(self.win)
 
@@ -66,7 +71,7 @@ class Menu:
         """
         Draw the submenu on the Pygame window.
         """
-        self.win.fill(GREEN_COLOR)
+        self.win.blit(self.background_image, (0, 0))  # Draw the background image
 
         buttons = []
         num_submenu_items = len(self.submenu_items)
