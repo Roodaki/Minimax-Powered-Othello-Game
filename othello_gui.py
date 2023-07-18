@@ -127,7 +127,7 @@ class OthelloGUI:
                 else:
                     self.invalid_move_message = "Invalid move! Try again."
 
-    def run_game(self):
+    def run_game(self, return_to_menu_callback=None):
         """
         Run the main game loop until the game is over and display the result.
         """
@@ -154,10 +154,11 @@ class OthelloGUI:
             self.message = "It's a tie!"
 
         self.draw_board()
-        pygame.time.delay(2000)  # Display the result for 2 seconds before quitting
+        pygame.time.delay(3000)  # Display the result for 2 seconds before returning
 
-        pygame.quit()
-        sys.exit()
+        # Call the return_to_menu_callback if provided
+        if return_to_menu_callback:
+            return_to_menu_callback()
 
 
 def run_game():

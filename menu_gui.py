@@ -4,7 +4,7 @@ from othello_gui import OthelloGUI, run_game
 from button_gui import Button
 
 # Constants and colors
-WIDTH, HEIGHT = 480, 320
+WIDTH, HEIGHT = 480, 560
 WHITE_COLOR = (255, 255, 255)
 BLACK_COLOR = (0, 0, 0)
 GREEN_COLOR = (0, 128, 0)
@@ -186,10 +186,17 @@ class Menu:
                         if button.check_collision((x, y)):
                             if button.text == "Multi-player\n(Play with Friend)":
                                 othello_gui = OthelloGUI()
-                                othello_gui.run_game()
+                                # Pass the draw_menu function as a callback to return to the main menu
+                                othello_gui.run_game(
+                                    return_to_menu_callback=self.draw_menu
+                                )
 
                             elif button.text == "Single-player\n(Play with AI)":
-                                self.run_single_player_game()
+                                othello_gui = OthelloGUI(player_mode="ai")
+                                # Pass the draw_menu function as a callback to return to the main menu
+                                othello_gui.run_game(
+                                    return_to_menu_callback=self.draw_menu
+                                )
 
                             elif button.text == "Return to Main Menu":
                                 self.draw_menu()  # Go back to the main menu
