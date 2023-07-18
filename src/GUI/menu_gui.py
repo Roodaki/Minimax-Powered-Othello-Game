@@ -1,7 +1,7 @@
 import pygame
 import sys
-from othello_gui import OthelloGUI, run_game
-from button_gui import Button
+from GUI.othello_gui import OthelloGUI, run_game
+from GUI.button_gui import Button
 
 # Constants and colors
 WIDTH, HEIGHT = 480, 560
