@@ -9,7 +9,7 @@ WHITE_COLOR = (255, 255, 255)
 BLACK_COLOR = (0, 0, 0)
 GREEN_COLOR = (0, 128, 0)
 SUBMENU_SPACING = 75  # Increase the vertical spacing between submenu buttons
-BACKGROUND_IMAGE_PATH = "./utils/pictures/othello.jpg"
+BACKGROUND_IMAGE_PATH = "./utils/pictures/othello_blurred.jpg"
 
 
 class Menu:
@@ -93,7 +93,7 @@ class Menu:
         """
         Draw the credit screen on the Pygame window.
         """
-        self.win.fill(GREEN_COLOR)
+        self.win.blit(self.background_image, (0, 0))  # Draw the background image
 
         credit_text = "Written and Developed by AmirHossein Roodaki"
         github_link = "GitHub: /Roodaki"
