@@ -9,6 +9,7 @@ BLACK_COLOR = (0, 0, 0)
 GREEN_COLOR = (0, 128, 0)
 BUTTON_COLOR = (120, 120, 120)
 BUTTON_SELECTED_COLOR = (200, 200, 200)
+SUBMENU_SPACING = 75  # Increase the vertical spacing between submenu buttons
 
 
 class Button:
@@ -17,17 +18,16 @@ class Button:
         self.font = font
         self.action = action
 
-        # Set the button's size based on the text's size
-        text_surface = font.render(text, True, BLACK_COLOR)
-        text_width, text_height = text_surface.get_size()
+        text_lines = text.split("\n")
+        text_width = max(font.size(line)[0] for line in text_lines)
+        text_height = font.size(text_lines[0])[1] * len(text_lines)
         self.width = max(
             width, text_width + 20
         )  # Add some padding to the button's width
         self.height = max(
-            height, text_height + 10
+            height, text_height + 20
         )  # Add some padding to the button's height
 
-        # Center the button on the screen
         self.rect = pygame.Rect(
             x - self.width // 2, y - self.height // 2, self.width, self.height
         )
@@ -37,9 +37,14 @@ class Button:
         pygame.draw.rect(win, button_color, self.rect)
         pygame.draw.rect(win, BLACK_COLOR, self.rect, 3)
 
-        text_surface = self.font.render(self.text, True, BLACK_COLOR)
-        text_rect = text_surface.get_rect(center=self.rect.center)
-        win.blit(text_surface, text_rect)
+        text_lines = self.text.split("\n")
+        for i, line in enumerate(text_lines):
+            text_surface = self.font.render(line, True, BLACK_COLOR)
+            text_rect = text_surface.get_rect(
+                centerx=self.rect.centerx,
+                centery=self.rect.centery + (i * 20) - (len(text_lines) - 1) * 10,
+            )
+            win.blit(text_surface, text_rect)
 
     def check_collision(self, pos):
         return self.rect.collidepoint(pos)
@@ -50,7 +55,10 @@ class Menu:
         self.win = self.initialize_pygame()
         self.menu_font = pygame.font.SysFont(None, 36)
         self.menu_items = ["Start Game", "Credit", "Exit"]
-        self.submenu_items = ["Play with Friend", "Play with AI"]
+        self.submenu_items = [
+            "Multi-player\n(Play with Friend)",
+            "Single-player\n(Play with AI)",
+        ]
         self.return_button = None
 
     def initialize_pygame(self):
@@ -77,18 +85,24 @@ class Menu:
         self.win.fill(GREEN_COLOR)
 
         buttons = []
+        num_submenu_items = len(self.submenu_items)
+        submenu_height = num_submenu_items * SUBMENU_SPACING
+        submenu_top_margin = (HEIGHT - submenu_height) // 2
+
         for i, item in enumerate(self.submenu_items):
+            button_y = submenu_top_margin + i * SUBMENU_SPACING
             button = Button(
-                WIDTH // 2, HEIGHT // 2 + i * 50, 200, 40, item, self.menu_font
-            )
+                WIDTH // 2, button_y, 200, 30, item, self.menu_font
+            )  # Adjust height to 30
             buttons.append(button)
             button.draw(self.win)
 
+        return_button_y = submenu_top_margin + num_submenu_items * SUBMENU_SPACING + 10
         self.return_button = Button(
             WIDTH // 2,
-            HEIGHT // 2 + len(self.submenu_items) * 50 + 30,
+            return_button_y,
             200,
-            40,
+            30,
             "Return to Main Menu",
             self.menu_font,
             self.draw_menu,
@@ -158,17 +172,12 @@ class Menu:
                     x, y = event.pos
                     for button in buttons:
                         if button.check_collision((x, y)):
-                            if button.text == "Play with Friend":
+                            if button.text == "Multi-player\n(Play with Friend)":
                                 othello_gui = OthelloGUI()
                                 othello_gui.run_game()
 
-                            elif button.text == "Play with AI":
+                            elif button.text == "Single-player\n(Play with AI)":
                                 run_game()
-
-                    if self.return_button.check_collision(
-                        (x, y)
-                    ):  # Handle the return button
-                        self.draw_menu()
 
     def handle_input_credit(self):
         while True:
