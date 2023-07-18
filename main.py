@@ -1,9 +1,4 @@
-from othello_gui import run_game
-
-
-def main():
-    run_game()
-
+from menu_gui import run_menu
 
 if __name__ == "__main__":
-    main()
+    run_menu()

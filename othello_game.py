@@ -1,11 +1,12 @@
 class OthelloGame:
-    def __init__(self):
+    def __init__(self, player_mode="friend"):
         self.board = [[0 for _ in range(8)] for _ in range(8)]
         self.board[3][3] = 1
         self.board[3][4] = -1
         self.board[4][3] = -1
         self.board[4][4] = 1
         self.current_player = 1
+        self.player_mode = player_mode
 
     def is_valid_move(self, row, col):
         """
