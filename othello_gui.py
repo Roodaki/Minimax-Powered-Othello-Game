@@ -3,11 +3,10 @@ import sys
 from othello_game import OthelloGame
 from ai_agent import get_best_move
 
-
 # Constants and colors
-WIDTH, HEIGHT = 480, 560  # Increase the height to accommodate the messaging area
+WIDTH, HEIGHT = 480, 560
 BOARD_SIZE = 8
-SQUARE_SIZE = (HEIGHT - 80) // BOARD_SIZE  # Adjust SQUARE_SIZE to fit messaging area
+SQUARE_SIZE = (HEIGHT - 80) // BOARD_SIZE
 BLACK_COLOR = (0, 0, 0)
 WHITE_COLOR = (255, 255, 255)
 GREEN_COLOR = (0, 128, 0)
@@ -15,23 +14,36 @@ GREEN_COLOR = (0, 128, 0)
 
 class OthelloGUI:
     def __init__(self, player_mode="friend"):
+        """
+        A graphical user interface (GUI) for playing the Othello game.
+
+        Args:
+            player_mode (str): The mode of the game, either "friend" or "ai" (default is "friend").
+        """
         self.win = self.initialize_pygame()
-        self.game = OthelloGame(
-            player_mode=player_mode
-        )  # Pass the player_mode argument
+        self.game = OthelloGame(player_mode=player_mode)
         self.message_font = pygame.font.SysFont(None, 24)
         self.message = ""
 
     def initialize_pygame(self):
+        """
+        Initialize the Pygame library and create the game window.
+
+        Returns:
+            pygame.Surface: The Pygame surface representing the game window.
+        """
         pygame.init()
         win = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Othello")
         return win
 
     def draw_board(self):
+        """
+        Draw the Othello game board and messaging area on the window.
+        """
         self.win.fill(GREEN_COLOR)
 
-        # Draw board grid
+        # Draw board grid and disks
         for row in range(BOARD_SIZE):
             for col in range(BOARD_SIZE):
                 pygame.draw.rect(
@@ -84,6 +96,9 @@ class OthelloGUI:
         pygame.display.update()
 
     def handle_input(self):
+        """
+        Handle user input events such as mouse clicks and game quitting.
+        """
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -100,6 +115,9 @@ class OthelloGUI:
                     self.message = "Invalid move! Try again."
 
     def run_game(self):
+        """
+        Run the main game loop until the game is over and display the result.
+        """
         while not self.game.is_game_over():
             self.handle_input()
 
@@ -130,5 +148,8 @@ class OthelloGUI:
 
 
 def run_game():
+    """
+    Start and run the Othello game.
+    """
     othello_gui = OthelloGUI()
     othello_gui.run_game()
