@@ -24,6 +24,7 @@ class OthelloGUI:
         self.game = OthelloGame(player_mode=player_mode)
         self.message_font = pygame.font.SysFont(None, 24)
         self.message = ""
+        self.invalid_move_message = ""
 
     def initialize_pygame(self):
         """
@@ -93,6 +94,16 @@ class OthelloGUI:
             )
             self.win.blit(message_surface, message_rect)
 
+        # Draw invalid move message
+        if self.invalid_move_message:
+            message_surface = self.message_font.render(
+                self.invalid_move_message, True, BLACK_COLOR
+            )
+            message_rect = message_surface.get_rect(
+                center=(WIDTH // 2, (HEIGHT + BOARD_SIZE * SQUARE_SIZE) // 2 + 20)
+            )
+            self.win.blit(message_surface, message_rect)
+
         pygame.display.update()
 
     def handle_input(self):
@@ -110,9 +121,11 @@ class OthelloGUI:
                 row = y // SQUARE_SIZE
                 if self.game.is_valid_move(row, col):
                     self.game.make_move(row, col)
-                    self.message = ""  # Clear any previous messages
+                    self.invalid_move_message = (
+                        ""  # Clear any previous invalid move message
+                    )
                 else:
-                    self.message = "Invalid move! Try again."
+                    self.invalid_move_message = "Invalid move! Try again."
 
     def run_game(self):
         """
