@@ -58,6 +58,7 @@ class Menu:
         self.submenu_items = [
             "Multi-player\n(Play with Friend)",
             "Single-player\n(Play with AI)",
+            "Return to Main Menu",  # Add "Return to Main Menu" option
         ]
         self.return_button = None
 
@@ -96,18 +97,6 @@ class Menu:
             )  # Adjust height to 30
             buttons.append(button)
             button.draw(self.win)
-
-        return_button_y = submenu_top_margin + num_submenu_items * SUBMENU_SPACING + 10
-        self.return_button = Button(
-            WIDTH // 2,
-            return_button_y,
-            200,
-            30,
-            "Return to Main Menu",
-            self.menu_font,
-            self.draw_menu,
-        )
-        self.return_button.draw(self.win)
 
         pygame.display.update()
         self.handle_input_submenu(buttons)
@@ -178,6 +167,9 @@ class Menu:
 
                             elif button.text == "Single-player\n(Play with AI)":
                                 run_game()
+
+                            elif button.text == "Return to Main Menu":
+                                self.draw_menu()  # Go back to the main menu
 
     def handle_input_credit(self):
         while True:
