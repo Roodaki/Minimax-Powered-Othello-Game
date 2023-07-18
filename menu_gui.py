@@ -94,8 +94,12 @@ class Menu:
         github_link = "GitHub: /Roodaki"
         return_button_text = "Return to Main Menu"
 
-        credit_surface = self.menu_font.render(credit_text, True, BLACK_COLOR)
-        github_surface = self.menu_font.render(github_link, True, BLACK_COLOR)
+        credit_font = pygame.font.SysFont(None, 24)
+        github_font = pygame.font.SysFont(None, 20)
+        return_button_font = pygame.font.SysFont(None, 30)
+
+        credit_surface = credit_font.render(credit_text, True, BLACK_COLOR)
+        github_surface = github_font.render(github_link, True, BLACK_COLOR)
 
         credit_rect = credit_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 40))
         github_rect = github_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2))
@@ -106,12 +110,33 @@ class Menu:
             200,
             40,
             return_button_text,
-            self.menu_font,
+            return_button_font,
             self.draw_menu,
         )
         self.return_button.draw(self.win)
 
-        self.win.blit(credit_surface, credit_rect)
+        # Wrap and render the credit text if it exceeds the window width
+        credit_lines = []
+        words = credit_text.split()
+        current_line = ""
+        for word in words:
+            if (
+                credit_font.size(current_line + word)[0] > WIDTH - 40
+            ):  # 40 is the padding
+                credit_lines.append(current_line)
+                current_line = word + " "
+            else:
+                current_line += word + " "
+        credit_lines.append(current_line)
+
+        # Display the credit text line by line
+        for i, line in enumerate(credit_lines):
+            line_surface = credit_font.render(line, True, BLACK_COLOR)
+            line_rect = line_surface.get_rect(
+                center=(WIDTH // 2, HEIGHT // 2 - 40 + i * 30)
+            )
+            self.win.blit(line_surface, line_rect)
+
         self.win.blit(github_surface, github_rect)
 
         pygame.display.update()
